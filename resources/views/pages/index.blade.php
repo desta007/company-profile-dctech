@@ -70,7 +70,7 @@
     <section id="hero">
         <div class="hero-container" data-aos="fade-up" data-aos-delay="150">
             <h1>Plan. Launch. Grow.</h1>
-            <h2>We are team of talented designers making websites with Bootstrap</h2>
+            <h2>we are team of talented developers making websites, android and IOS</h2>
             <div class="d-flex">
                 <a href="#about" class="btn-get-started scrollto">Get Started</a>
                 <a href="{{ $mainContent->start_video_link }}" class="glightbox btn-watch-video"><i
@@ -661,7 +661,7 @@
                 <!-- You can delete the links only if you purchased the pro version. -->
                 <!-- Licensing information: https://bootstrapmade.com/license/ -->
                 <!-- Purchase the pro version with working PHP/AJAX contact form: https://bootstrapmade.com/thinksvy-free-multi-purpose-html-template/ -->
-                Designed by <a href="https://bootstrapmade.com/">BootstrapMade</a>
+                Designed by DC Tech Corporation</a>
             </div>
         </div>
     </footer><!-- End Footer -->
