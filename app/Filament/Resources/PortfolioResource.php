@@ -40,6 +40,21 @@ class PortfolioResource extends Resource
                 Forms\Components\Textarea::make('description')
                     ->required()
                     ->columnSpanFull(),
+                Forms\Components\TextInput::make('client_name')
+                    ->required()
+                    ->maxLength(255),
+                Forms\Components\DatePicker::make('project_date')
+                    ->required(),
+                Forms\Components\TextInput::make('project_url')
+                    ->required()
+                    ->maxLength(255),
+                Forms\Components\TextInput::make('detail_title')
+                    ->required()
+                    ->maxLength(255),
+
+                Forms\Components\Textarea::make('detail_description')
+                    ->required()
+                    ->columnSpanFull(),
 
                 Forms\Components\Repeater::make('portfolioDetail')
                     ->relationship('portfolioDetails')
@@ -53,29 +68,48 @@ class PortfolioResource extends Resource
                             ->required()
                             ->reactive(),
 
-                        Forms\Components\Group::make()
-                            ->schema(function (callable $get) {
-                                if ($get('type') === 'video') {
-                                    return [
-                                        Forms\Components\TextInput::make('file')
-                                            ->label('Video URL')
-                                            ->url()
-                                            ->placeholder('https://youtube.com/... atau https://vimeo.com/...')
-                                            ->required(),
-                                    ];
-                                }
+                        Forms\Components\FileUpload::make('image_file')
+                            ->label('Image File')
+                            ->directory('portfolio_details')
+                            ->image()
+                            ->visibility('public')
+                            ->required(fn(callable $get) => $get('type') === 'image')
+                            ->visible(fn(callable $get) => $get('type') === 'image'),
 
-                                return [
-                                    Forms\Components\FileUpload::make('file')
-                                        ->label('Image File')
-                                        ->directory('portfolio_details')
-                                        ->image()
-                                        ->visibility('public')
-                                        ->required(),
-                                ];
-                            })
-                            ->reactive(),
+                        Forms\Components\TextInput::make('video_url')
+                            ->label('Video URL')
+                            ->url()
+                            ->placeholder('https://youtube.com/... atau https://vimeo.com/...')
+                            ->required(fn(callable $get) => $get('type') === 'video')
+                            ->visible(fn(callable $get) => $get('type') === 'video'),
                     ])
+                    ->mutateRelationshipDataBeforeFillUsing(function (array $data): array {
+                        // mapping dari DB ke field form
+                        if (($data['type'] ?? '') === 'image') {
+                            $data['image_file'] = $data['file'] ?? null;
+                        } elseif (($data['type'] ?? '') === 'video') {
+                            $data['video_url'] = $data['file'] ?? null;
+                        }
+                        return $data;
+                    })
+                    ->mutateRelationshipDataBeforeCreateUsing(function (array $data): array {
+                        if ($data['type'] === 'image') {
+                            $data['file'] = $data['image_file'] ?? '';
+                        } elseif ($data['type'] === 'video') {
+                            $data['file'] = $data['video_url'] ?? '';
+                        }
+                        unset($data['image_file'], $data['video_url']);
+                        return $data;
+                    })
+                    ->mutateRelationshipDataBeforeSaveUsing(function (array $data): array {
+                        if ($data['type'] === 'image') {
+                            $data['file'] = $data['image_file'] ?? '';
+                        } elseif ($data['type'] === 'video') {
+                            $data['file'] = $data['video_url'] ?? '';
+                        }
+                        unset($data['image_file'], $data['video_url']);
+                        return $data;
+                    })
                     ->minItems(1)
                     ->columnSpanFull(),
             ]);
