@@ -19,6 +19,10 @@ class Portfolio extends Model
         'detail_description'
     ];
 
+    protected $casts = [
+        'project_date' => 'date',
+    ];
+
     public function portfolioDetails(): HasMany
     {
         return $this->hasMany(PortfolioDetail::class, 'portfolio_id', 'id');
