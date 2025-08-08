@@ -118,7 +118,7 @@
                             <h3>Project information</h3>
                             <ul>
                                 <li><strong>Category</strong>: {{ $portfolio->category }}</li>
-                                <li><strong>Client</strong>: {{ $portfolio->client }}</li>
+                                <li><strong>Client</strong>: {{ $portfolio->client_name }}</li>
                                 <li><strong>Project date</strong>:
                                     {{ $portfolio->project_date ? $portfolio->project_date->format('F d, Y') : '-' }}
                                 </li>
