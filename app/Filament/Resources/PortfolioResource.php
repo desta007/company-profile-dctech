@@ -40,6 +40,44 @@ class PortfolioResource extends Resource
                 Forms\Components\Textarea::make('description')
                     ->required()
                     ->columnSpanFull(),
+
+                Forms\Components\Repeater::make('portfolioDetail')
+                    ->relationship('portfolioDetails')
+                    ->label('Portfolio Details')
+                    ->schema([
+                        Forms\Components\Select::make('type')
+                            ->options([
+                                'image' => 'Image',
+                                'video' => 'Video',
+                            ])
+                            ->required()
+                            ->reactive(),
+
+                        Forms\Components\Group::make()
+                            ->schema(function (callable $get) {
+                                if ($get('type') === 'video') {
+                                    return [
+                                        Forms\Components\TextInput::make('file')
+                                            ->label('Video URL')
+                                            ->url()
+                                            ->placeholder('https://youtube.com/... atau https://vimeo.com/...')
+                                            ->required(),
+                                    ];
+                                }
+
+                                return [
+                                    Forms\Components\FileUpload::make('file')
+                                        ->label('Image File')
+                                        ->directory('portfolio_details')
+                                        ->image()
+                                        ->visibility('public')
+                                        ->required(),
+                                ];
+                            })
+                            ->reactive(),
+                    ])
+                    ->minItems(1)
+                    ->columnSpanFull(),
             ]);
     }
 

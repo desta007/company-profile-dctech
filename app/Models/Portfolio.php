@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Portfolio extends Model
 {
@@ -10,6 +11,16 @@ class Portfolio extends Model
         'category',
         'image',
         'name',
-        'description'
+        'client_name',
+        'project_date',
+        'project_url',
+        'description',
+        'detail_title',
+        'detail_description'
     ];
+
+    public function portfolioDetails(): HasMany
+    {
+        return $this->hasMany(PortfolioDetail::class, 'portfolio_id', 'id');
+    }
 }

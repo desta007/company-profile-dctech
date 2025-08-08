@@ -16,7 +16,12 @@ return new class extends Migration
             $table->string('category');
             $table->string('image');
             $table->string('name');
+            $table->string('client_name');
+            $table->string('project_date');
+            $table->string('project_url');
             $table->text('description');
+            $table->string('detail_title');
+            $table->text('detail_description');
             $table->timestamps();
         });
     }

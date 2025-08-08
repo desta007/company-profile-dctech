@@ -403,8 +403,8 @@
                                 <a href="{{ asset('storage/' . $web->image) }}" data-gallery="portfolioGallery"
                                     class="portfolio-lightbox preview-link" title="{{ $web->name }}"><i
                                         class="bx bx-plus"></i></a>
-                                <a href="portfolio-details.html" class="details-link" title="More Details"><i
-                                        class="bx bx-link"></i></a>
+                                <a href="{{ route('portfolioDetail', $web->id) }}" class="details-link"
+                                    title="More Details"><i class="bx bx-link"></i></a>
                             </div>
                         </div>
                     @empty
@@ -419,8 +419,8 @@
                                 <a href="{{ asset('storage/' . $mobile->image) }}" data-gallery="portfolioGallery"
                                     class="portfolio-lightbox preview-link" title="{{ $mobile->name }}"><i
                                         class="bx bx-plus"></i></a>
-                                <a href="portfolio-details.html" class="details-link" title="More Details"><i
-                                        class="bx bx-link"></i></a>
+                                <a href="{{ route('portfolioDetail', $mobile->id) }}" class="details-link"
+                                    title="More Details"><i class="bx bx-link"></i></a>
                             </div>
                         </div>
                     @empty
@@ -435,8 +435,8 @@
                                 <a href="{{ asset('storage/' . $design->image) }}" data-gallery="portfolioGallery"
                                     class="portfolio-lightbox preview-link" title="{{ $design->name }}"><i
                                         class="bx bx-plus"></i></a>
-                                <a href="portfolio-details.html" class="details-link" title="More Details"><i
-                                        class="bx bx-link"></i></a>
+                                <a href="{{ route('portfolioDetail', $design->id) }}" class="details-link"
+                                    title="More Details"><i class="bx bx-link"></i></a>
                             </div>
                         </div>
                     @empty
@@ -451,8 +451,8 @@
                                 <a href="{{ asset('storage/' . $course->image) }}" data-gallery="portfolioGallery"
                                     class="portfolio-lightbox preview-link" title="{{ $course->name }}"><i
                                         class="bx bx-plus"></i></a>
-                                <a href="portfolio-details.html" class="details-link" title="More Details"><i
-                                        class="bx bx-link"></i></a>
+                                <a href="{{ route('portfolioDetail', $course->id) }}" class="details-link"
+                                    title="More Details"><i class="bx bx-link"></i></a>
                             </div>
                         </div>
                     @empty
@@ -639,7 +639,7 @@
 
                     <div class="col-lg-4 col-md-6 footer-newsletter">
                         <h4>Our Newsletter</h4>
-                        <p>Tamen quem nulla quae legam multos aute sint culpa legam noster magna</p>
+                        <p>Please subscribe to get periodic updates from us</p>
                         <form action="" method="post">
                             <input type="email" name="email"><input type="submit" value="Subscribe">
                         </form>

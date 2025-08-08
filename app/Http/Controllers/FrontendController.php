@@ -8,6 +8,7 @@ use App\Models\ContactUs;
 use App\Models\GuestMessage;
 use App\Models\MainContent;
 use App\Models\Portfolio;
+use App\Models\PortfolioDetail;
 use App\Models\Product;
 use App\Models\Quote;
 use App\Models\Service;
@@ -70,5 +71,21 @@ class FrontendController extends Controller
         ]);
 
         return redirect()->back()->with('success', 'Message sent successfully!');
+    }
+
+    public function portfolioDetail($id)
+    {
+        $portfolio = Portfolio::findOrFail($id);
+        $contactUs = ContactUs::first();
+
+        $detailImage = $portfolio->portfolioDetails()->where('type', 'image')->get();
+        $detailVideo = $portfolio->portfolioDetails()->where('type', 'video')->get();
+
+        return view('pages.portfolioDetail', compact(
+            'portfolio',
+            'contactUs',
+            'detailImage',
+            'detailVideo'
+        ));
     }
 }
