@@ -5,12 +5,12 @@
     <meta charset="utf-8">
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
-    <title>DC Tech Corporation</title>
+    <title>{{ $mainContent->title }}</title>
     <meta content="" name="description">
     <meta content="" name="keywords">
 
     <!-- Favicons -->
-    <link href="{{ asset('assets/img/favicon.png') }}" rel="icon">
+    <link href="{{ asset('storage/dctech_logo.png') }}" rel="icon">
     <link href="{{ asset('assets/img/apple-touch-icon.png') }}" rel="apple-touch-icon">
 
     <!-- Google Fonts -->
@@ -305,7 +305,6 @@
         <!-- ======= Services Section ======= -->
         <section id="services" class="services section-bg">
             <div class="container" data-aos="fade-up">
-
                 <div class="section-title">
                     <h2>Services</h2>
                     <p>Check our Services</p>
@@ -661,7 +660,9 @@
                 <!-- You can delete the links only if you purchased the pro version. -->
                 <!-- Licensing information: https://bootstrapmade.com/license/ -->
                 <!-- Purchase the pro version with working PHP/AJAX contact form: https://bootstrapmade.com/thinksvy-free-multi-purpose-html-template/ -->
-                Designed by DC Tech Corporation</a>
+                Designed by <a href="{{ route('index') }}">DC Tech Corporation</a><br>
+                <a href="{{ route('index') }}"><img src="{{ asset('storage/dctech_logo.png') }}" alt="DC Tech"
+                        style="height: 250px; margin-top: 15px;"></a>
             </div>
         </div>
     </footer><!-- End Footer -->
