@@ -199,7 +199,7 @@
   }
 
   /**
-   * Porfolio isotope and filter
+   * Porfolio isotope and filter with Search and Load More
    */
   window.addEventListener('load', () => {
 
@@ -211,7 +211,107 @@
       });
 
       let portfolioFilters = select('#portfolio-flters li', true);
+      let searchInput = select('#portfolio-search-input');
+      let loadMoreBtn = select('#btn-load-more');
+      let noResultsMsg = select('#portfolio-no-results');
+      let currentFilter = '*';
+      let itemsToShow = 6;
+      let itemsIncrement = 6;
 
+      // Function to get all items matching current filter
+      function getFilteredItems() {
+        let allItems = select('.portfolio-item', true);
+        if (currentFilter === '*') {
+          return allItems;
+        }
+        return allItems.filter(item => item.classList.contains(currentFilter.replace('.', '')));
+      }
+
+      // Function to apply search filter
+      function applySearchFilter() {
+        let searchTerm = searchInput ? searchInput.value.toLowerCase().trim() : '';
+        let allItems = select('.portfolio-item', true);
+        let visibleCount = 0;
+
+        allItems.forEach((item, index) => {
+          let name = item.getAttribute('data-name') || '';
+          let description = item.getAttribute('data-description') || '';
+          let matchesSearch = searchTerm === '' || name.includes(searchTerm) || description.includes(searchTerm);
+          let matchesFilter = currentFilter === '*' || item.classList.contains(currentFilter.replace('.', ''));
+          let withinLimit = index < itemsToShow || searchTerm !== '';
+
+          if (matchesSearch && matchesFilter) {
+            if (withinLimit || searchTerm !== '') {
+              item.classList.remove('portfolio-hidden');
+              item.style.display = '';
+              visibleCount++;
+            } else {
+              item.classList.add('portfolio-hidden');
+            }
+          } else {
+            item.classList.add('portfolio-hidden');
+          }
+        });
+
+        // Show/hide no results message
+        if (noResultsMsg) {
+          noResultsMsg.style.display = visibleCount === 0 ? 'block' : 'none';
+        }
+
+        // Update load more button visibility
+        updateLoadMoreButton();
+
+        // Relayout isotope
+        portfolioIsotope.arrange({
+          filter: function(itemElem) {
+            return !itemElem.classList.contains('portfolio-hidden');
+          }
+        });
+
+        portfolioIsotope.on('arrangeComplete', function() {
+          AOS.refresh();
+        });
+      }
+
+      // Function to update load more button
+      function updateLoadMoreButton() {
+        if (!loadMoreBtn) return;
+
+        let searchTerm = searchInput ? searchInput.value.toLowerCase().trim() : '';
+        
+        // Hide when searching
+        if (searchTerm !== '') {
+          loadMoreBtn.style.display = 'none';
+          return;
+        }
+
+        let filteredItems = getFilteredItems();
+        let hiddenItems = filteredItems.filter(item => item.classList.contains('portfolio-hidden'));
+
+        if (hiddenItems.length > 0) {
+          loadMoreBtn.style.display = 'inline-flex';
+        } else {
+          loadMoreBtn.style.display = 'none';
+        }
+      }
+
+      // Initial setup - show only first 6 items
+      function initializePortfolio() {
+        let allItems = select('.portfolio-item', true);
+        allItems.forEach((item, index) => {
+          if (index >= itemsToShow) {
+            item.classList.add('portfolio-hidden');
+          } else {
+            item.classList.remove('portfolio-hidden');
+          }
+        });
+        updateLoadMoreButton();
+        portfolioIsotope.arrange();
+      }
+
+      initializePortfolio();
+
+      // Category filter click handler
       on('click', '#portfolio-flters li', function(e) {
         e.preventDefault();
         portfolioFilters.forEach(function(el) {
@@ -219,14 +319,89 @@
         });
         this.classList.add('filter-active');
 
-        portfolioIsotope.arrange({
-          filter: this.getAttribute('data-filter')
+        currentFilter = this.getAttribute('data-filter');
+        itemsToShow = itemsIncrement; // Reset items count when changing category
+
+        // Clear search when changing category
+        if (searchInput) {
+          searchInput.value = '';
+        }
+
+        // Reset all items first
+        let allItems = select('.portfolio-item', true);
+        let filteredCount = 0;
+        
+        allItems.forEach((item) => {
+          let matchesFilter = currentFilter === '*' || item.classList.contains(currentFilter.replace('.', ''));
+          
+          if (matchesFilter) {
+            if (filteredCount < itemsToShow) {
+              item.classList.remove('portfolio-hidden');
+            } else {
+              item.classList.add('portfolio-hidden');
+            }
+            filteredCount++;
+          } else {
+            item.classList.add('portfolio-hidden');
+          }
         });
+
+        updateLoadMoreButton();
+
+        portfolioIsotope.arrange({
+          filter: function(itemElem) {
+            return !itemElem.classList.contains('portfolio-hidden');
+          }
+        });
+        
         portfolioIsotope.on('arrangeComplete', function() {
-          AOS.refresh()
+          AOS.refresh();
         });
 
       }, true);
+
+      // Search input handler
+      if (searchInput) {
+        let searchTimeout;
+        searchInput.addEventListener('input', function() {
+          clearTimeout(searchTimeout);
+          searchTimeout = setTimeout(applySearchFilter, 300); // Debounce
+        });
+      }
+
+      // Load more button handler
+      if (loadMoreBtn) {
+        loadMoreBtn.addEventListener('click', function() {
+          itemsToShow += itemsIncrement;
+          
+          let filteredItems = getFilteredItems();
+          let shownCount = 0;
+
+          filteredItems.forEach((item) => {
+            if (shownCount < itemsToShow) {
+              if (item.classList.contains('portfolio-hidden')) {
+                item.classList.remove('portfolio-hidden');
+                item.style.animation = 'fadeIn 0.5s ease forwards';
+              }
+            }
+            if (!item.classList.contains('portfolio-hidden')) {
+              shownCount++;
+            }
+          });
+
+          updateLoadMoreButton();
+
+          portfolioIsotope.arrange({
+            filter: function(itemElem) {
+              return !itemElem.classList.contains('portfolio-hidden');
+            }
+          });
+
+          portfolioIsotope.on('arrangeComplete', function() {
+            AOS.refresh();
+          });
+        });
+      }
     }
 
   });

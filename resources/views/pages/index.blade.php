@@ -379,6 +379,16 @@
                     <p>Check our Portfolio</p>
                 </div>
 
+                <!-- Search Bar -->
+                <div class="row mb-4" data-aos="fade-up" data-aos-delay="50">
+                    <div class="col-lg-6 col-md-8 mx-auto">
+                        <div class="portfolio-search">
+                            <i class="bi bi-search"></i>
+                            <input type="text" id="portfolio-search-input" class="form-control" placeholder="Search portfolio by name or description...">
+                        </div>
+                    </div>
+                </div>
+
                 <div class="row" data-aos="fade-up" data-aos-delay="100">
                     <div class="col-lg-12 d-flex justify-content-center">
                         <ul id="portfolio-flters">
@@ -391,72 +401,130 @@
                     </div>
                 </div>
 
+                <!-- No Results Message -->
+                <div id="portfolio-no-results" class="text-center py-4" style="display: none;">
+                    <i class="bi bi-folder-x" style="font-size: 48px; color: #ccc;"></i>
+                    <p class="mt-2 text-muted">No portfolio items found matching your search.</p>
+                </div>
+
                 <div class="row portfolio-container" data-aos="fade-up" data-aos-delay="200">
 
+                    @php $portfolioIndex = 0; @endphp
+
                     @forelse ($portfoliosWeb as $web)
-                        <div class="col-lg-4 col-md-6 portfolio-item filter-web">
-                            <img src="{{ asset('storage/' . $web->image) }}" class="img-fluid" alt="">
+                        <div class="col-lg-4 col-md-6 portfolio-item filter-web {{ $portfolioIndex >= 6 ? 'portfolio-hidden' : '' }}" 
+                             data-name="{{ strtolower($web->name) }}" 
+                             data-description="{{ strtolower($web->description) }}">
+                            <img src="{{ asset('storage/' . $web->image) }}" class="img-fluid" alt="{{ $web->name }}">
                             <div class="portfolio-info">
                                 <h4>{{ $web->name }}</h4>
-                                <p>{{ $web->description }}</p>
-                                <a href="{{ asset('storage/' . $web->image) }}" data-gallery="portfolioGallery"
-                                    class="portfolio-lightbox preview-link" title="{{ $web->name }}"><i
-                                        class="bx bx-plus"></i></a>
-                                <a href="{{ route('portfolioDetail', $web->id) }}" class="details-link"
-                                    title="More Details"><i class="bx bx-link"></i></a>
+                                <p>{{ Str::limit($web->description, 50) }}</p>
+                                <div class="portfolio-links">
+                                    <a href="{{ asset('storage/' . $web->image) }}" data-gallery="portfolioGallery"
+                                        class="portfolio-lightbox preview-link" title="{{ $web->name }}">
+                                        <i class="bx bx-zoom-in"></i>
+                                        <span>Preview</span>
+                                    </a>
+                                    <a href="{{ route('portfolioDetail', $web->id) }}" class="details-link btn-view-details"
+                                        title="View Details">
+                                        <i class="bx bx-show"></i>
+                                        <span>View Details</span>
+                                    </a>
+                                </div>
                             </div>
                         </div>
+                        @php $portfolioIndex++; @endphp
                     @empty
                     @endforelse
 
                     @forelse ($portfoliosMobile as $mobile)
-                        <div class="col-lg-4 col-md-6 portfolio-item filter-mobile">
-                            <img src="{{ asset('storage/' . $mobile->image) }}" class="img-fluid" alt="">
+                        <div class="col-lg-4 col-md-6 portfolio-item filter-mobile {{ $portfolioIndex >= 6 ? 'portfolio-hidden' : '' }}" 
+                             data-name="{{ strtolower($mobile->name) }}" 
+                             data-description="{{ strtolower($mobile->description) }}">
+                            <img src="{{ asset('storage/' . $mobile->image) }}" class="img-fluid" alt="{{ $mobile->name }}">
                             <div class="portfolio-info">
                                 <h4>{{ $mobile->name }}</h4>
-                                <p>{{ $mobile->description }}</p>
-                                <a href="{{ asset('storage/' . $mobile->image) }}" data-gallery="portfolioGallery"
-                                    class="portfolio-lightbox preview-link" title="{{ $mobile->name }}"><i
-                                        class="bx bx-plus"></i></a>
-                                <a href="{{ route('portfolioDetail', $mobile->id) }}" class="details-link"
-                                    title="More Details"><i class="bx bx-link"></i></a>
+                                <p>{{ Str::limit($mobile->description, 50) }}</p>
+                                <div class="portfolio-links">
+                                    <a href="{{ asset('storage/' . $mobile->image) }}" data-gallery="portfolioGallery"
+                                        class="portfolio-lightbox preview-link" title="{{ $mobile->name }}">
+                                        <i class="bx bx-zoom-in"></i>
+                                        <span>Preview</span>
+                                    </a>
+                                    <a href="{{ route('portfolioDetail', $mobile->id) }}" class="details-link btn-view-details"
+                                        title="View Details">
+                                        <i class="bx bx-show"></i>
+                                        <span>View Details</span>
+                                    </a>
+                                </div>
                             </div>
                         </div>
+                        @php $portfolioIndex++; @endphp
                     @empty
                     @endforelse
 
                     @forelse ($portfoliosDesign as $design)
-                        <div class="col-lg-4 col-md-6 portfolio-item filter-design">
-                            <img src="{{ asset('storage/' . $design->image) }}" class="img-fluid" alt="">
+                        <div class="col-lg-4 col-md-6 portfolio-item filter-design {{ $portfolioIndex >= 6 ? 'portfolio-hidden' : '' }}" 
+                             data-name="{{ strtolower($design->name) }}" 
+                             data-description="{{ strtolower($design->description) }}">
+                            <img src="{{ asset('storage/' . $design->image) }}" class="img-fluid" alt="{{ $design->name }}">
                             <div class="portfolio-info">
                                 <h4>{{ $design->name }}</h4>
-                                <p>{{ $design->description }}</p>
-                                <a href="{{ asset('storage/' . $design->image) }}" data-gallery="portfolioGallery"
-                                    class="portfolio-lightbox preview-link" title="{{ $design->name }}"><i
-                                        class="bx bx-plus"></i></a>
-                                <a href="{{ route('portfolioDetail', $design->id) }}" class="details-link"
-                                    title="More Details"><i class="bx bx-link"></i></a>
+                                <p>{{ Str::limit($design->description, 50) }}</p>
+                                <div class="portfolio-links">
+                                    <a href="{{ asset('storage/' . $design->image) }}" data-gallery="portfolioGallery"
+                                        class="portfolio-lightbox preview-link" title="{{ $design->name }}">
+                                        <i class="bx bx-zoom-in"></i>
+                                        <span>Preview</span>
+                                    </a>
+                                    <a href="{{ route('portfolioDetail', $design->id) }}" class="details-link btn-view-details"
+                                        title="View Details">
+                                        <i class="bx bx-show"></i>
+                                        <span>View Details</span>
+                                    </a>
+                                </div>
                             </div>
                         </div>
+                        @php $portfolioIndex++; @endphp
                     @empty
                     @endforelse
 
                     @forelse ($portfoliosCourse as $course)
-                        <div class="col-lg-4 col-md-6 portfolio-item filter-course">
-                            <img src="{{ asset('storage/' . $course->image) }}" class="img-fluid" alt="">
+                        <div class="col-lg-4 col-md-6 portfolio-item filter-course {{ $portfolioIndex >= 6 ? 'portfolio-hidden' : '' }}" 
+                             data-name="{{ strtolower($course->name) }}" 
+                             data-description="{{ strtolower($course->description) }}">
+                            <img src="{{ asset('storage/' . $course->image) }}" class="img-fluid" alt="{{ $course->name }}">
                             <div class="portfolio-info">
                                 <h4>{{ $course->name }}</h4>
-                                <p>{{ $course->description }}</p>
-                                <a href="{{ asset('storage/' . $course->image) }}" data-gallery="portfolioGallery"
-                                    class="portfolio-lightbox preview-link" title="{{ $course->name }}"><i
-                                        class="bx bx-plus"></i></a>
-                                <a href="{{ route('portfolioDetail', $course->id) }}" class="details-link"
-                                    title="More Details"><i class="bx bx-link"></i></a>
+                                <p>{{ Str::limit($course->description, 50) }}</p>
+                                <div class="portfolio-links">
+                                    <a href="{{ asset('storage/' . $course->image) }}" data-gallery="portfolioGallery"
+                                        class="portfolio-lightbox preview-link" title="{{ $course->name }}">
+                                        <i class="bx bx-zoom-in"></i>
+                                        <span>Preview</span>
+                                    </a>
+                                    <a href="{{ route('portfolioDetail', $course->id) }}" class="details-link btn-view-details"
+                                        title="View Details">
+                                        <i class="bx bx-show"></i>
+                                        <span>View Details</span>
+                                    </a>
+                                </div>
                             </div>
                         </div>
+                        @php $portfolioIndex++; @endphp
                     @empty
                     @endforelse
 
+                </div>
+
+                <!-- Load More Button -->
+                <div class="row mt-4" data-aos="fade-up">
+                    <div class="col-12 text-center">
+                        <button id="btn-load-more" class="btn-load-more" style="{{ $portfolioIndex <= 6 ? 'display: none;' : '' }}">
+                            <i class="bx bx-loader-alt"></i>
+                            <span>Load More Projects</span>
+                        </button>
+                    </div>
                 </div>
 
             </div>
